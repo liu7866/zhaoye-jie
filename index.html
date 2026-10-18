@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101713">
+  <title>照夜界：灵潮将起</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="game.js"></script>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="照夜界首页"><span class="brand-mark">照</span><span><b>照夜界</b><small>一段尚未写定的修仙人生</small></span></a>
+      <div class="top-actions">
+        <button class="quiet-button" id="saveButton" type="button">保存进度</button>
+        <button class="quiet-button" id="newGameButton" type="button">重新开局</button>
+      </div>
+    </header>
+
+    <section class="hero" id="top" aria-label="照夜界边境坊市">
+      <img src="assets/zhaoye-world.png" alt="灵潮夜色中的边境坊市、河桥与远山天隙">
+      <div class="hero-shade"></div>
+      <div class="hero-copy">
+        <p class="kicker">灵潮纪 · 第三百一十七年</p>
+        <h1>灵潮将起</h1>
+        <p>暴雨夜，青铜古镜将你从无灵世界卷入照夜界。如今身无凭籍、修为全无，天隙就在河对岸。</p>
+      </div>
+      <div class="world-stamp"><span>照夜界</span><small>苍梧渡 · 边境</small></div>
+    </section>
+
+    <div class="dayline">
+      <span><i class="tiny-dot"></i><b id="dateLabel">灵潮纪 317 年 · 春一月 初一</b></span>
+      <span id="locationLabel">苍梧渡</span>
+      <span id="weatherLabel">潮息微明</span>
+    </div>
+
+    <main class="layout">
+      <aside class="left-rail">
+        <section class="panel player-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>旅人手记</span><span class="seal">你</span></div>
+          <h2 id="realmLabel">凡人</h2>
+          <p class="muted" id="pathLabel">尚未选择修行道路</p>
+          <div class="meter-block"><div class="meter-label"><span>气血</span><b id="hpText">100 / 100</b></div><div class="meter"><i id="hpBar" class="hp-fill"></i></div></div>
+          <div class="meter-block"><div class="meter-label"><span>修为</span><b id="xpText">0 / 100</b></div><div class="meter"><i id="xpBar" class="xp-fill"></i></div></div>
+          <div class="stat-grid">
+            <div><small>灵石</small><b id="stonesLabel">12</b></div>
+            <div><small>名望</small><b id="fameLabel">0</b></div>
+            <div><small>天隙线索</small><b id="clueLabel">0</b></div>
+            <div><small>同行者</small><b id="partyLabel">独行</b></div>
+            <div><small>灵材</small><b id="herbsLabel">0</b></div>
+            <div><small>护身符</small><b id="talismanLabel">0</b></div>
+          </div>
+          <div class="faction-note"><small>当前归属</small><b id="factionLabel">未入门</b></div>
+        </section>
+
+        <section class="panel people-panel" data-mobile-panel="people">
+          <div class="section-heading"><span>与你相识的人</span><small>关系会记住你的选择</small></div>
+          <div id="peopleList" class="people-list"></div>
+          <p class="panel-footnote" id="peopleFootnote">他们有自己的行程、目标与选择。点开人物卡片可查看近况。</p>
+        </section>
+
+        <section class="panel companions-panel" data-mobile-panel="people">
+          <div class="section-heading"><span>同行队伍</span><small>可独自行动</small></div>
+          <div id="companionsList" class="companions-list"><p class="empty-note">还没有结伴的朋友或追随者。</p></div>
+        </section>
+
+        <section class="panel school-panel hidden" id="schoolPanel" data-mobile-panel="people">
+          <div class="section-heading"><span>师门关系</span><small id="schoolSummary">入门后逐渐相识</small></div>
+          <div id="schoolList" class="school-roster"></div>
+        </section>
+      </aside>
+
+      <section class="center-column">
+        <article class="story-card panel" data-mobile-panel="event" aria-live="polite">
+          <div class="story-topline"><span id="eventType" class="event-type">初入此界</span><span id="eventPlace" class="event-place">苍梧渡</span></div>
+          <h2 id="eventTitle">醒在灵潮之夜</h2>
+          <div class="story-rule"></div>
+          <p id="eventText" class="story-text"></p>
+          <div id="eventDetails" class="event-details"></div>
+          <div id="choices" class="choices"></div>
+          <div id="eventResult" class="event-result" hidden></div>
+        </article>
+
+        <section class="panel free-actions" id="freeActions" data-mobile-panel="actions">
+          <div class="section-heading"><span>自行安排</span><small>处理事件后，每轮可安排一项行动</small></div>
+          <p class="action-lock-note" id="actionLockNote">先处理眼前的事件，之后就能修行、休整、访友或出发。</p>
+          <div class="action-grid" id="actionGrid">
+            <button class="action-card" type="button" data-action="cultivate"><span class="action-icon">息</span><b>静心修行</b><small>闭关两日，积累修为</small></button>
+            <button class="action-card" type="button" data-action="rest"><span class="action-icon">栖</span><b>休整调息</b><small>歇一日，恢复气血</small></button>
+            <button class="action-card" type="button" data-action="social"><span class="action-icon">茶</span><b>拜访故人</b><small>听听他们最近的打算</small></button>
+            <button class="action-card" type="button" data-action="commission"><span class="action-icon">令</span><b>承接委托</b><small>采集、护送或调查</small></button>
+            <button class="action-card" type="button" data-action="craft"><span class="action-icon">炉</span><b>炼药制符</b><small>消耗灵材制作补给</small></button>
+            <button class="action-card" type="button" data-action="continue"><span class="action-icon">行</span><b>继续赶路</b><small>不额外安排，等待新的机缘</small></button>
+          </div>
+        </section>
+
+        <section class="panel map-panel" id="mapPanel" data-mobile-panel="actions">
+          <div class="section-heading"><span>山河行迹</span><small>远行耗时，也会遇见沿途之事</small></div>
+          <div id="mapList" class="map-list"></div>
+        </section>
+
+        <section class="panel chronicle-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>因果留痕</span><small>最近发生的事</small></div>
+          <ol id="chronicle" class="chronicle"></ol>
+        </section>
+      </section>
+
+      <aside class="right-rail">
+        <section class="panel world-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>照夜界时局</span><span class="pulse-mark">潮</span></div>
+          <p id="worldText" class="world-text"></p>
+          <div class="pressure-row"><span>天隙异动</span><span class="pressure-dots" id="pressureDots"></span></div>
+          <div class="tide-note" id="tideNote"></div>
+        </section>
+        <section class="panel goal-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>眼前的线索</span><small>没有唯一正解</small></div>
+          <p>灵潮重现，天隙周围的古阵正在苏醒。你可以追查异象，也可以先安顿自己的生活。</p>
+          <div class="goal-count"><span>找到的线索</span><b id="goalCount">0 / 2</b></div>
+          <div class="goal-track"><i id="goalBar"></i></div>
+          <small class="muted">线索足够时，天隙深处会向你显露新的去路。</small>
+        </section>
+        <section class="panel note-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>行走此界</span></div>
+          <p>战斗可以独行、组队、用符或逃跑。加入势力会带来庇护与责任；也能做散修、接委托、采药炼制或结伴御兽。</p>
+          <p>关系由好感与信任共同构成。六位女修各有目标，道侣仍会追求自己的道路。</p>
+        </section>
+        <section class="panel note-panel" data-mobile-panel="world">
+          <div class="section-heading"><span>旅途结局</span><small id="endingCount">已记下 0 种</small></div>
+          <p id="endingMemory">你做出的选择会留下不同的结局记忆。</p>
+        </section>
+      </aside>
+    </main>
+
+    <details class="atlas panel" data-mobile-panel="world">
+      <summary><span>照夜世界志</span><small>天地规则 · 山河诸州 · 势力纪事</small></summary>
+      <div class="atlas-content">
+        <section class="atlas-section">
+          <h2>灵潮、道痕与飞升</h2>
+          <p>灵气沿地脉流动，数十年一度的灵潮会改变灵药、妖兽与古阵的分布。修士可沿吐纳、剑道、丹道、炼体、符阵、御兽、愿力或魔道修行；境界带来力量，也会让长期使用的力量在心神留下“道痕”。道痕能被经历与关系缓和，不能只靠一枚丹药抹去。</p>
+          <p>八百年前的“断天之变”令古老灵路崩塌，飞升传承失去踪迹。如今灵潮回升，天隙古阵苏醒；飞升是否仍然存在，没有人能给出确证。</p>
+        </section>
+        <section class="atlas-section">
+          <h2>山河诸州</h2>
+          <div class="atlas-grid">
+            <article><b>中州·云京原</b><p>皇朝、宗门与凡人城镇交错，制度严密，地脉与官道常成为争端焦点。</p></article>
+            <article><b>北境·霜河关</b><p>雪原边塞与妖兽迁徙之地，修士和凡人军镇共同守望霜河防线。</p></article>
+            <article><b>南岭·百药泽</b><p>药谷、雨林与古老部族并存，丹师、巫祝和御兽传承在此交汇。</p></article>
+            <article><b>西陆·赤炉地</b><p>沙海与火山之间有矿城和铸器坊，商路、水源与古遗迹都很重要。</p></article>
+            <article><b>东海·千岛群</b><p>海上宗门、渔村与海兽领域交错，岛屿间消息往往慢于局势变化。</p></article>
+            <article><b>天隙</b><p>横贯大陆的裂谷，散布失控阵法与破碎洞天，传说曾是古代飞升灵路的一段。</p></article>
+          </div>
+        </section>
+        <section class="atlas-section">
+          <h2>可以亲自踏足的地方</h2>
+          <div class="atlas-grid">
+            <article><b>苍梧渡</b><p>边境坊市，也是你醒来的地方。商路、义诊与修士招募都从这里开始。</p></article>
+            <article><b>云京驿城</b><p>巡灵司整理各地异案，州郡赈务与修士规条在此碰撞。</p></article>
+            <article><b>霜河关</b><p>守军和镖队共同抵御北境妖潮，失踪商队留下了未解的旧事。</p></article>
+            <article><b>百药泽</b><p>泽民药田依赖水脉，百族会盟正寻找失窃的泽心种。</p></article>
+            <article><b>千岛渡</b><p>航路随潮汐变化，药船失联、海兽迁徙和岛村生计彼此牵连。</p></article>
+            <article><b>青篁林与雾岭</b><p>旧路标和灵藤会随灵潮改道，也是散修、灵兽与采药人的常行之地。</p></article>
+          </div>
+        </section>
+        <section class="atlas-section">
+          <h2>彼此牵制的势力</h2>
+          <div class="atlas-grid faction-grid">
+            <article><b>太微道盟</b><p>多个宗门组成的盟约体系，维护跨州秩序，也争夺灵脉与话语权。旗下有归鹤剑宗、松风丹谷等传承。</p></article>
+            <article><b>赤烬教</b><p>以情绪、愿力和誓约修行，庇护被名门排斥的人；教内对誓约边界与扩张方向意见不一。</p></article>
+            <article><b>大晟皇朝与巡灵司</b><p>皇朝管理州郡、凡人官僚与道路；巡灵司登记异案、追查灵潮，也受制于层层官牒。</p></article>
+            <article><b>万方商盟</b><p>经营灵材、商路与消息网络，重视契约信用，却会依据利益重新评估立场。</p></article>
+            <article><b>百族会盟</b><p>由妖族与山野部族组成，守护族地与灵脉；各族对人类修士有不同态度。</p></article>
+            <article><b>散修互助会</b><p>由坊市、镖队和小型修行组织构成，缺少统一领袖，却能提供住处、委托与人情。</p></article>
+          </div>
+          <p class="atlas-foot">正道与魔道是历史和政治形成的称呼。宗门会保护城镇，也可能垄断资源；魔教会使用激烈手段，也可能收留无处可去的人。真正的立场要看每个人做了什么。</p>
+        </section>
+      </div>
+    </details>
+  </div>
+
+  <nav class="mobile-nav" aria-label="游戏页面">
+    <button type="button" data-mobile-tab="event"><span>卷</span><small>事件</small></button>
+    <button type="button" data-mobile-tab="actions"><span>行</span><small>行动</small></button>
+    <button type="button" data-mobile-tab="people"><span>人</span><small>人物</small></button>
+    <button type="button" data-mobile-tab="world"><span>界</span><small>世界</small></button>
+  </nav>
+
+  <dialog id="personDialog" class="person-dialog">
+    <button class="dialog-close" id="closeDialog" type="button" aria-label="关闭">×</button>
+    <div id="personDialogContent"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
